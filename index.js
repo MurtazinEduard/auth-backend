@@ -18,7 +18,7 @@ import * as ProductController from './controllers/ProductController.js';
 
 mongoose
   .connect(
-    'mongodb+srv://edward:wwwwww@cluster0.ofyk8xl.mongodb.net/burger?retryWrites=true&w=majority',
+    process.env.MONGODB_URI
   )
   .then(() => {
     console.log('DB started');
@@ -67,7 +67,7 @@ app.get('/categories', ProductController.getCategories);
 
 app.delete('/products/:id', checkAuth, ProductController.remove);
 
-app.listen(4444, (err) => {
+app.listen(process.env.PORT || 4444, (err) => {
   if (err) {
     return console.log(err);
   }
