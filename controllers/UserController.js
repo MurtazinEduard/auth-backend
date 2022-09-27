@@ -17,7 +17,6 @@ export const register = async (req, res) => {
       email: req.body.email,
       fullName: req.body.fullName,
       passwordHash: hash,
-      orders: [],
     });
 
     const user = await doc.save();
@@ -82,64 +81,6 @@ export const login = async (req, res) => {
     console.log(err);
     res.status(500).json({
       message: 'Не удалось авторизоваться',
-    });
-  }
-};
-//тут крч снизу пример как брать себя чтобы мои заказы брать
-export const getMe = async (req, res) => {
-  try {
-    const user = await UserModel.findById(req.userId);
-    if (!user) {
-      return res.status(404).json({
-        message: 'Пользователь не найден',
-      });
-    }
-    const { passwordHash, ...userData } = user._doc;
-    res.json(userData);
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({
-      message: 'Нет доступа',
-    });
-  }
-};
-//пока не робит нифига, нужно ли передавать что-то хзз, токен надо точно
-//p.s охуенно робит починиль
-export const getOrders = async (req, res) => {
-  try {
-    const user = await UserModel.findById(req.userId);
-    if (!user) {
-      return res.status(404).json({
-        message: 'Пользователь не найден',
-      });
-    }
-    res.json(user.orders);
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({
-      message: 'Ошибка при получении заказов',
-    });
-  }
-};
-
-export const sendOrder = async (req, res) => {
-  try {
-    const user = await UserModel.findById(req.userId);
-    const newDate = Date.now()
-    const order = {
-      date: String(newDate),
-      items: req.body,
-      status: 'В процессе'
-    }
-    user.orders.push(order)
-    user.save()
-    res.json({
-      message: 'Успешно'
-    })
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({
-      message: 'Ошибка при отправке заказа',
     });
   }
 };
