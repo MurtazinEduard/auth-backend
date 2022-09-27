@@ -9,7 +9,7 @@ import {
   registerValidation,
 } from './validations.js';
 
-
+import checkAuth from './utils/checkAuth.js';
 
 import * as UserController from './controllers/UserController.js';
 
@@ -33,6 +33,8 @@ app.use(express.json());
 app.post('/auth/register', registerValidation, UserController.register);
 
 app.post('/auth/login', loginValidation, UserController.login);
+
+app.get('/auth/me', checkAuth, UserController.getMe);
 
 app.listen(process.env.PORT || 4444, (err) => {
   if (err) {
