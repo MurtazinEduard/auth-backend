@@ -19,11 +19,11 @@ export const register = async (req, res) => {
       passwordHash: hash,
     });
 
-    const user = await doc.save();
+    const user2 = await doc.save();
 
     const token = jwt.sign(
       {
-        _id: user._id,
+        _id: user2._id,
       },
       'edward777',
       {
@@ -31,7 +31,7 @@ export const register = async (req, res) => {
       },
     );
 
-    const { passwordHash, ...userData } = user._doc;
+    const { passwordHash, ...userData } = user2._doc;
 
     res.json({
       ...userData,
@@ -47,15 +47,15 @@ export const register = async (req, res) => {
 
 export const login = async (req, res) => {
   try {
-    const user = await UserModel.findOne({ email: req.body.email });
-    if (!user) {
+    const user2 = await UserModel.findOne({ email: req.body.email });
+    if (!user2) {
       return res.status(404).json({
         message: 'Пользователь не найден',
       });
     }
     const isValidPass = await bcrypt.compare(
       req.body.password,
-      user._doc.passwordHash,
+      user2._doc.passwordHash,
     );
     if (!isValidPass) {
       return res.status(403).json({
@@ -64,14 +64,14 @@ export const login = async (req, res) => {
     }
     const token = jwt.sign(
       {
-        _id: user._id,
+        _id: user2._id,
       },
       'edward777',
       {
         expiresIn: '30d',
       },
     );
-    const { passwordHash, ...userData } = user._doc;
+    const { passwordHash, ...userData } = user2._doc;
 
     res.json({
       ...userData,
